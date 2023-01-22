@@ -1017,7 +1017,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3901744014180492820}
   - component: {fileID: 7226048967691336582}
-  - component: {fileID: 6942586109621878583}
+  - component: {fileID: 2367773694467357353}
   m_Layer: 0
   m_Name: poor_character
   m_TagString: Untagged
@@ -1054,8 +1054,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4426500972957433006}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: fbae6e9309c59f145830d8d9cac4c4ca, type: 3}
+  m_Controller: {fileID: 9100000, guid: 30c859c45d040b64980406a0044f1a3c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1064,7 +1064,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6942586109621878583
+--- !u!114 &2367773694467357353
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1073,9 +1073,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4426500972957433006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4627bc081b3f98e45b1a7c81e42c4a29, type: 3}
+  m_Script: {fileID: 11500000, guid: 7701114f15d734240a121938280caf96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walk_type: poor_walk
 --- !u!1 &4514313556143610708
 GameObject:
   m_ObjectHideFlags: 0

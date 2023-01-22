@@ -41,32 +41,5 @@ public class CharacterMovement : MonoBehaviour
             transform.localPosition = pos;
         }
     }
-    
-
-
-   /* [SerializeField] private Camera cam;
-    private Vector3 mousePos;
-    private Vector3 lastMousePos;
-    private Vector3 newPosForTrans;
-    private void Move()
-    {
-        transform.position += Vector3.forward * forwadSpeed * Time.deltaTime;
-
-        if (Input.GetMouseButton(0))
-        {
-            mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
-
-            float xRange = mousePos.x - lastMousePos.x;
-
-            newPosForTrans.x = transform.position.x + xRange * Time.deltaTime * swipeSpeed;
-            newPosForTrans.y = transform.position.y;
-            newPosForTrans.z = transform.position.z;
-
-            newPosForTrans.x = Mathf.Clamp(newPosForTrans.x, -maxClampVnum, maxClampVnum);
-            transform.position = newPosForTrans;
-
-            lastMousePos = mousePos;
-        }
-    }*/
 
 }

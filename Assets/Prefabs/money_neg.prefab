@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: 2718286759755242496}
   - component: {fileID: 170499266711333066}
   - component: {fileID: -4589847968953067343}
+  - component: {fileID: -2780090851413070007}
+  - component: {fileID: -574842930650331764}
   m_Layer: 0
   m_Name: money_neg
-  m_TagString: Untagged
+  m_TagString: income
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,3 +97,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnY: 90
+--- !u!64 &-2780090851413070007
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827687797132396831}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6931494555681260192, guid: f31948c614dd8f1488162ad34d16818b, type: 3}
+--- !u!114 &-574842930650331764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827687797132396831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da110a7eb79037843b04ef0a522fb69d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEarn: 0
+  earnMoney: 5
