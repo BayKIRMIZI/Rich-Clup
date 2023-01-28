@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,182 +8,234 @@ public class PlayerController : MonoBehaviour
     public static Animator animator;
 
     [SerializeField] private Text moneyText;
-    [SerializeField] private GameObject[] Models;
+    [SerializeField] private GameObject[] models;
+    [SerializeField] private GameObject gameOverUI;
 
     private GameObject tempModel;
     private int upgradeIndex = 0;
-    private bool isEnter;
-
-    public static string walk;
-
-    private void Start()
+    private PlayerStats playerSt;
+    
+    public void InitPlayer()
     {
-        UpgradeModel(upgradeIndex);
-        //animator.SetBool("isWalking", false);
-
-        // ------------------
+        playerSt = GetComponent<PlayerStats>();
+        MainCharacterPool();
+        SetActiveModel(0, 0);
         animator.SetTrigger("idle");
-
-        //------------------
     }
     
     public static void AnimControl()
     {
-        //animator.SetBool("isWalking", true);
         animator.SetTrigger("poor_walk");
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void MainCharacterPool()
     {
-        if (!collision.gameObject.GetComponent<Earn>())
-            return;
-
-        if (collision.gameObject.tag == "income")
+        for (int i = 1; i < models.Length; i++)
         {
-            if (collision.gameObject.GetComponent<Earn>().isEarn)
-            {
-                PlayerStats.Money += collision.gameObject.GetComponent<Earn>().earnMoney;
+            models[i].SetActive(false);
+        }
+    }
 
-                if (upgradeIndex == 0 && PlayerStats.Money >= 20)
-                {
-                    UpgradeModel(1);
-                }
-                else if (upgradeIndex == 1 && PlayerStats.Money >= 200)
-                {
-                    UpgradeModel(2);
-                }
-                else if (upgradeIndex == 2 && PlayerStats.Money >= 500)
-                {
-                    UpgradeModel(3);
-                }
+    private void SetActiveModel(int lastIndex, int nextIndex)
+    {
+        models[lastIndex].SetActive(false);
+        models[nextIndex].SetActive(true);
+
+        tempModel = models[nextIndex];
+        animator = tempModel.GetComponent<Animator>();
+        
+        //if (GameManager.isGameStarted)
+        if (LevelManager.isGameStarted)
+        {
+            animator.SetTrigger("spin");
+        }
+
+        upgradeIndex = nextIndex;
+       
+    }
+    
+    private void GetUpgrade()
+    {
+        if (upgradeIndex == 0 && playerSt.money >= 20)
+        {
+            SetActiveModel(upgradeIndex, upgradeIndex + 1);
+        }
+        else if (upgradeIndex == 1 && playerSt.money >= 200)
+        {
+            SetActiveModel(upgradeIndex, upgradeIndex + 1);
+        }
+        else if (upgradeIndex == 2 && playerSt.money >= 500)
+        {
+            SetActiveModel(upgradeIndex, upgradeIndex + 1);
+        }
+    }
+
+    private void GetDownGrade()
+    {
+        if (upgradeIndex == 1 && playerSt.money < 20)
+        {
+            SetActiveModel(upgradeIndex, upgradeIndex - 1);
+        }
+        else if (upgradeIndex == 2 && playerSt.money < 200)
+        {
+            SetActiveModel(upgradeIndex, upgradeIndex - 1);
+        }
+        else if (upgradeIndex == 3 && playerSt.money < 500)
+        {
+            SetActiveModel(upgradeIndex, upgradeIndex - 1);
+        }
+    }
+    
+    private void CheckCharMoney()
+    {
+        for (int i = 0; i < LevelManager.chars.Length; i++)
+        {
+            LevelManager.chars[i].SetCharPanel(playerSt);
+            Debug.Log("Check index: " + i);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Earn earn = other.gameObject.GetComponent<Earn>();
+
+        CharController distController = other.gameObject.GetComponent<CharController>();
+        Animator distAnimator = other.gameObject.GetComponentInChildren<Animator>();
+
+        CharController charController
+            = other.gameObject.transform.parent.GetComponent<CharController>();
+        Animator charAnimator = other.gameObject.GetComponent<Animator>();
+
+        PlayerMovement movement = this.GetComponent<PlayerMovement>();
+        MainCharStats mainCharStats = tempModel.GetComponent<MainCharStats>();
+
+        int layerIndex = animator.GetLayerIndex("body");
+
+        if (earn)
+        {
+            if (earn.isEarn)
+            {
+                playerSt.money += earn.earnMoney;
+                GetUpgrade();
             }
             else
             {
-                PlayerStats.Money -= collision.gameObject.GetComponent<Earn>().earnMoney;
-
-                if (upgradeIndex == 1 && PlayerStats.Money < 20)
+                if (playerSt.money < earn.earnMoney)
                 {
-                    UpgradeModel(0);
+                    playerSt.money = 0;
                 }
-                else if(upgradeIndex == 2 && PlayerStats.Money < 200)
+                else
                 {
-                    UpgradeModel(1);
+                    playerSt.money -= earn.earnMoney;
                 }
-                else if(upgradeIndex == 3 && PlayerStats.Money < 500)
-                {
-                    UpgradeModel(2);
-                }
+                GetDownGrade();
             }
 
-            moneyText.text = "$" + PlayerStats.Money + "K";
-            Destroy(collision.gameObject);
+            moneyText.text = "$" + playerSt.money + "K";
+            CheckCharMoney();
+            Destroy(other.gameObject);
         }
-        else
+
+        if (distController)
         {
-            isEnter = true;
-            if (PlayerStats.Money < collision.gameObject.GetComponent<Earn>().earnMoney)
+            if (distController.isFall)
+                return;
+
+            if (playerSt.money > distController.earnMoney)
             {
-                if (PlayerStats.Money == 0) // DURUM 3
+                distAnimator.SetTrigger("scared");
+                animator.SetLayerWeight(layerIndex, 1);
+                animator.SetTrigger("slap_up");
+            }
+        }
+
+        if (charController)
+        {
+            if (charController.isFall)
+                return;
+
+            if (playerSt.money < charController.earnMoney)
+            {
+                if (playerSt.money == 0) // DURUM 3
                 {
                     Debug.Log("Defeat !!!");
-                    this.GetComponent<CharacterMovement>().forwadSpeed = 0;
+                    movement.forwadSpeed = 0;
+                    charAnimator.SetTrigger("slap");
                     animator.SetTrigger("defeat");
 
                     // Biraz bekle sonra GameOver UI aç
+                    //gameOverUI.SetActive(true);
                 }
                 else // DURUM 2
                 {
                     Debug.Log("Force? ");
-
+                    charAnimator.SetTrigger("slap");
                     animator.SetTrigger("force");
                 }
             }
             else // DURUM 1
             {
-                Debug.Log("Tokatı Yapıştırrr");
-                StartCoroutine(
-                        Anim_Play(
-                            collision.gameObject.GetComponent<Animator>(),
-                            "isScared", true, false, 0.1f));
+                Debug.Log("Tokatı Önce Kaldır -- Yapıştırrr");
+                charAnimator.SetTrigger("fall");
+                charController.isFall = true;
 
-                animator.SetTrigger( tempModel.GetComponent<CharacterStats>().SlapTypeString() );
+                //animator.SetTrigger(mainCharStats.SlapTypeString());
+                //animator.Play("Anim_rich_catwalk_slap");
+                animator.SetLayerWeight(layerIndex, 1);
+                animator.SetTrigger("slap_down");
             }
+
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        if(isEnter)
+        CharController distController = other.gameObject.GetComponent<CharController>();
+        CharController charController 
+            = other.gameObject.transform.parent.GetComponent<CharController>();
+        Animator distAnimator = other.gameObject.GetComponentInChildren<Animator>();
+        PlayerMovement movement = this.GetComponent<PlayerMovement>();
+        MainCharStats mainCharStats = tempModel.GetComponent<MainCharStats>();
+        int layerIndex = animator.GetLayerIndex("body");
+
+        if (distController && !distController.isFall)
         {
-            if (PlayerStats.Money < collision.gameObject.GetComponent<Earn>().earnMoney)
+            distAnimator.SetTrigger("idle");
+            mainCharStats.Walk();
+        }
+
+        if (charController)
+        {
+
+            if (playerSt.money < charController.earnMoney && playerSt.money != 0) // DURUM 2
             {
-                if (PlayerStats.Money != 0) // DURUM 2
+                Debug.Log("Para sıfırlandı");
+
+                if (playerSt.money < (charController.earnMoney / 2))
                 {
-                    Debug.Log("Para sıfırlandı");
-                    PlayerStats.Money = 0;
+                    playerSt.money = 0;
                 }
+                else
+                {
+                    playerSt.money -= (charController.earnMoney / 2);
+                }
+
+                GetDownGrade();
+                other.enabled = false;
             }
             else // DURUM 1
             {
                 Debug.Log("Para ver");
-                PlayerStats.Money += collision.gameObject.GetComponent<Earn>().earnMoney;
+                playerSt.money += charController.earnMoney;
 
-                if (upgradeIndex == 0 && PlayerStats.Money >= 20)
-                {
-                    UpgradeModel(1);
-                }
-                else if (upgradeIndex == 1 && PlayerStats.Money >= 200)
-                {
-                    UpgradeModel(2);
-                }
-                else if (upgradeIndex == 2 && PlayerStats.Money >= 500)
-                {
-                    UpgradeModel(3);
-                }
+                GetUpgrade();
             }
 
-            moneyText.text = "$" + PlayerStats.Money + "K";
-            Destroy(collision.gameObject, 5); // Level sonu sıfırlanacağı için gerek olmayabilir
+            moneyText.text = "$" + playerSt.money + "K";
+            CheckCharMoney();
         }
 
-        isEnter = false;
+        animator.SetLayerWeight(layerIndex, 0);
     }
-
-    IEnumerator Anim_Play(Animator anim, string parameter, bool boolValue, bool isBackAnim, float second) {
-        yield return new WaitForSeconds(second);
-        anim.SetBool(parameter, boolValue);
-
-        if (parameter == "isWalking" && !boolValue)
-        {
-            this.GetComponent<CharacterMovement>().forwadSpeed = 0;
-        }
-
-        if (isBackAnim)
-        {
-            yield return new WaitForSeconds(second);
-            anim.SetBool(parameter, !boolValue);
-        }
-    }
-
-    private void UpgradeModel(int index)
-    {
-        // Yeni karakter geçiş efekti ekle
-        Destroy(tempModel);
-
-        tempModel = Instantiate(Models[index], transform.position, transform.rotation);
-        tempModel.transform.parent = this.transform;
-        upgradeIndex = index;
-        animator = tempModel.GetComponent<Animator>();
-
-
-        if (GameManager.isGameStarted)
-        {
-            animator.SetTrigger("spin");
-           // this.GetComponent<CharacterMovement>().forwadSpeed = 2f;
-        }
-        
-    }
-
-
-
+    
 }

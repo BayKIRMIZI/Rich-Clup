@@ -4,11 +4,5 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    public static ulong Money; 
-    public ulong startMoney = 5; 
-    
-    void Start()
-    {
-        Money = startMoney;
-    }
+    public ulong money = 5;
 }

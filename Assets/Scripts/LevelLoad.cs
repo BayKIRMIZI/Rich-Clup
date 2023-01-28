@@ -4,50 +4,137 @@ using UnityEngine;
 
 public class LevelLoad : MonoBehaviour
 {
-    [Header("income")]
-    [SerializeField] private GameObject bag;
-    [SerializeField] private GameObject posMoney;
-    [SerializeField] private GameObject negMoney;
+    [Header("Income")]
+    [SerializeField] private GameObject[] Environment; 
+    // 0-> bag, 1-> posMoney, 2-> negMoney, 3-> tax
+
     [Header("Human")]
     [SerializeField] private GameObject[] woman_chars;
     [SerializeField] private GameObject[] man_chars;
 
-
-
+    [Header("UI")]
+    [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private GameObject tapToStartUI;
+    
     private float zPos = 5f;
     private GameObject tempClone;
-
-    void Start()
+    
+    public void InitLevel()
     {
         Load();
     }
 
     private void Load()
     {
-        BagClone();
-        MoneyClone();
-        ModelClone();
+        StartBagClone();
+        while (zPos < 75f)
+        {
+            GetRandomMethod();
+        }
+        
+        //MoneyClone();
+        //ModelClone();
     }
 
-    private void BagClone()
+    private void StartBagClone()
     {
         Vector3 cloneStartPos = new Vector3(-1.75f, 1f, zPos);
         float xPosVnum = 1.75f;
         float zPosVnum = 1.5f;
-        for (int i = 0; i < 3; i++)
+
+        int i = 0;
+        for (; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                tempClone = Instantiate(bag, 
+                tempClone = Instantiate(Environment[0], 
                     cloneStartPos + new Vector3(xPosVnum * j, 0f, zPosVnum * i),
                     Quaternion.identity);
                 tempClone.transform.parent = this.transform;
             }
-
-            zPos += i * zPosVnum;
         }
 
-        zPos += 5f; // Kullanılınca sonraki çağırmada 5 birim uzaktan başlasın
+        zPos += (i - 1) * zPosVnum + 5f;
+    }
+    
+    private void GetRandomMethod()
+    {
+        int chance = Random.Range(0, 3);
+        if (chance == 0)
+        {
+            RandomChoiseEnvironment();
+        }
+        else if(chance == 1)
+        {
+            ModelClone();
+        }
+        else
+        {
+            // Model çapraz sıralı method yaz
+        }
+    }
+
+    private void EnvironmentClone(GameObject cloneObj, float xPos, float zPos, int count)
+    {
+        float yPos = 0f;
+
+        if (cloneObj.tag == "income")
+        {
+            yPos = 1f;
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            tempClone = Instantiate(cloneObj,
+                   new Vector3(xPos, yPos, zPos + 1.5f * i),
+                   Quaternion.identity
+                   );
+            tempClone.transform.parent = this.transform;
+        }
+    }
+
+    private void RandomChoiseEnvironment()
+    {
+        float[] xPositions = { -1.75f, 0f, 1.75f };
+        int xPosCount = Random.Range(1, xPositions.Length + 1);
+        float xPos = xPositions[Random.Range(0, xPositions.Length)];
+        int countChoise = Random.Range(1,4);
+
+        int i = 0;
+        if (xPosCount == 3)
+        {
+            for (; i < xPosCount; i++)
+            {
+                EnvironmentClone(
+                    Environment[Random.Range(1, Environment.Length)],
+                    xPositions[i],
+                    zPos,
+                    countChoise
+                );
+            }
+        }
+        else
+        {
+            while (i < xPosCount)
+            {
+                float choise = xPositions[Random.Range(0, xPositions.Length)];
+                if (xPos != choise)
+                {
+                    xPos = choise;
+
+                    EnvironmentClone(
+                        Environment[Random.Range(1, Environment.Length)],
+                        xPos,
+                        zPos,
+                        countChoise
+                        );
+
+                    i++;
+                }
+            }
+        }
+
+        zPos += (xPosCount - 1) * 1.5f + 5f;
     }
 
     private void MoneyClone()
@@ -63,7 +150,7 @@ public class LevelLoad : MonoBehaviour
         {
             for ( ; i < moneyCount; i++)
             {
-                tempClone = Instantiate(posMoney, 
+                tempClone = Instantiate(Environment[1], 
                     new Vector3(xPosVnum, 1f, zPos + i * 1.5f), 
                     Quaternion.identity);
                 tempClone.transform.parent = this.transform;
@@ -73,7 +160,7 @@ public class LevelLoad : MonoBehaviour
         {
             for ( ; i < moneyCount; i++)
             {
-                tempClone = Instantiate(negMoney,
+                tempClone = Instantiate(Environment[2],
                     new Vector3(xPosVnum, 1f, zPos + i * 1.5f),
                     Quaternion.identity);
                 tempClone.transform.parent = this.transform;
@@ -85,9 +172,9 @@ public class LevelLoad : MonoBehaviour
 
     private void ModelClone()
     {
-        int xPosCount = Random.Range(1, 4);
         float[] xPositions = { -1.75f, 0f, 1.75f };
-        float xPos = xPositions[Random.Range(0, 3)];
+        int xPosCount = Random.Range(1, xPositions.Length + 1);
+        float xPos = xPositions[Random.Range(0, xPositions.Length)];
         
         int i = 0;
         if (xPosCount == 3)
@@ -115,12 +202,11 @@ public class LevelLoad : MonoBehaviour
         {
             while (i < xPosCount)
             {
-                float choise = xPositions[Random.Range(0, 3)];
+                float choise = xPositions[Random.Range(0, xPositions.Length)];
                 if (xPos != choise)
                 {
                     xPos = choise;
-                    //int ch = Random.Range(0,2);
-                    int ch = 0;
+                    int ch = Random.Range(0,2);
                     if (ch == 0)
                     {
                         tempClone = Instantiate(
@@ -143,10 +229,11 @@ public class LevelLoad : MonoBehaviour
             }
         }
 
-        zPos += i * 1.5f + 5f;
+        //zPos += i * 1.5f + 5f;
+        zPos += 5f;
     }
 
-    private void LevelReset()
+    public void LevelReset()
     {
         int count = transform.childCount;
         
@@ -154,5 +241,56 @@ public class LevelLoad : MonoBehaviour
         {
             Destroy(transform.GetChild(i).gameObject);
         }
+
+        Load();
+        gameOverUI.SetActive(false);
+        tapToStartUI.SetActive(true);
     }
+
+
+
+    private void BagClone(float xPos, float zPos, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            tempClone = Instantiate(Environment[0],
+                   new Vector3(xPos, 0f, zPos + 1.5f * i),
+                   Quaternion.identity);
+            tempClone.transform.parent = this.transform;
+        }
+    }
+
+    private void PosMoneyClone(float xPos, float zPos, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            tempClone = Instantiate(Environment[1],
+                   new Vector3(xPos, 0f, zPos + 1.5f * i),
+                   Quaternion.identity);
+            tempClone.transform.parent = this.transform;
+        }
+    }
+
+    private void NegMoneyClone(float xPos, float zPos, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            tempClone = Instantiate(Environment[2],
+                   new Vector3(xPos, 0f, zPos + 1.5f * i),
+                   Quaternion.identity);
+            tempClone.transform.parent = this.transform;
+        }
+    }
+
+    private void TaxMoneyClone(float xPos, float zPos, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            tempClone = Instantiate(Environment[3],
+                   new Vector3(xPos, 0f, zPos + 1.5f * i),
+                   Quaternion.identity);
+            tempClone.transform.parent = this.transform;
+        }
+    }
+
 }

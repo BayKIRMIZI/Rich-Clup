@@ -6,6 +6,7 @@ TagManager:
   tags:
   - income
   - human
+  - distColl
   layers:
   - Default
   - TransparentFX

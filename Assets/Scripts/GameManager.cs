@@ -5,28 +5,33 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static bool isGameStarted;
+    [SerializeField] private GameObject[] levels;
 
-    [SerializeField] private GameObject mainCanvas;
-    [SerializeField] private Text moneyText;
+    private GameObject[] levelArray;
+    private GameLevel gameLevel;
+    private PlayerData playerData;
 
-    private void Start()
+    private void Awake()
     {
-        isGameStarted = false;
-        mainCanvas.SetActive(true);
-        moneyText.text = "$" + PlayerStats.Money + "K";
+        gameLevel = transform.GetComponent<GameLevel>();
+        SaveSystem.SaveLevel(gameLevel);
+        playerData = SaveSystem.LoadLevel(gameLevel);
+
+        LevelClones();
+
+        levelArray[playerData.level].SetActive(true);
+        
     }
 
-    private void Update()
+    private void LevelClones()
     {
-        if (isGameStarted)
-            return;
+        levelArray = new GameObject[levels.Length]; 
 
-        if (Input.GetMouseButton(0))
+        for (int i = 0; i < levels.Length; i++)
         {
-            isGameStarted = true;
-            mainCanvas.SetActive(false);
-            PlayerController.AnimControl();
+            levelArray[i] = Instantiate(levels[i]);
+            levelArray[i].SetActive(false);
+            levelArray[i].transform.parent = this.transform;
         }
     }
 }
