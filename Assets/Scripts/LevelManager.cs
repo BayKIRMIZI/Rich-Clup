@@ -66,7 +66,8 @@ public class LevelManager : MonoBehaviour
         {
             isGameStarted = true;
             tapToStartText.SetActive(false);
-            PlayerController.AnimControl();
+            //PlayerController.AnimControl();
+            playerCont.Anim_Control();
         }
     }
 }

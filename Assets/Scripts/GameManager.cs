@@ -14,13 +14,17 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         gameLevel = transform.GetComponent<GameLevel>();
-        SaveSystem.SaveLevel(gameLevel);
+        //SaveSystem.SaveLevel(gameLevel);
         playerData = SaveSystem.LoadLevel(gameLevel);
 
-        LevelClones();
+        string levelPath = "Levels/Level_" + playerData.level.ToString();
 
-        levelArray[playerData.level].SetActive(true);
-        
+        //LevelClones();
+        //levelArray[playerData.level].SetActive(true);
+
+        GameObject levelPrefab =  Resources.Load<GameObject>(levelPath);
+        GameObject clone = Instantiate(levelPrefab);
+        clone.transform.parent = this.transform;
     }
 
     private void LevelClones()

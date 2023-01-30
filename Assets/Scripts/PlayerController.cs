@@ -25,7 +25,19 @@ public class PlayerController : MonoBehaviour
     
     public static void AnimControl()
     {
+        int layerIndex = animator.GetLayerIndex("body");
+        animator.SetLayerWeight(layerIndex, 0);
         animator.SetTrigger("poor_walk");
+        Debug.Log("Statik Anim Control");
+    }
+
+    public void Anim_Control()
+    {
+        //int layerIndex = animator.GetLayerIndex("body");
+        //animator.SetLayerWeight(layerIndex, 0);
+        animator = tempModel.GetComponent<Animator>();
+        animator.SetTrigger("poor_walk");
+        Debug.Log(animator);
     }
 
     private void MainCharacterPool()
@@ -91,7 +103,6 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < LevelManager.chars.Length; i++)
         {
             LevelManager.chars[i].SetCharPanel(playerSt);
-            Debug.Log("Check index: " + i);
         }
     }
 
