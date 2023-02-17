@@ -5,6 +5,7 @@ public class CharController : MonoBehaviour
 {
     public ulong earnMoney;
     public bool isFall;
+    public bool isEarnable;
 
     [SerializeField] private Text money;
     [SerializeField] private GameObject red;

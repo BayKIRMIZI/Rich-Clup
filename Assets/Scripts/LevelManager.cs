@@ -3,13 +3,12 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
-    public static bool isGameStarted;
+    public static bool isLevelStarted;
     public static CharController[] chars;
 
     [SerializeField] private GameObject tapToStartText;
     [SerializeField] private Text moneyText;
     [SerializeField] private GameObject player;
-    [SerializeField] private Text levelText;
     [SerializeField] private Transform humanModels;
 
     private PlayerStats playerSt;
@@ -24,10 +23,10 @@ public class LevelManager : MonoBehaviour
         playerMove = player.GetComponent<PlayerMovement>();
         gameLevel = transform.GetComponent<GameLevel>();
 
+        FillCharArray();
         InitLoad();
         GameManagerInit();
 
-        FillCharArray();
     }
 
     private void InitLoad()
@@ -38,13 +37,12 @@ public class LevelManager : MonoBehaviour
 
     private void GameManagerInit()
     {
-        isGameStarted = false;
+        isLevelStarted = false;
         tapToStartText.SetActive(true);
 
         gameLevel.LoadLevel();
 
         moneyText.text = "$" + playerSt.money + "K";
-        levelText.text = "Level " + gameLevel.level.ToString();
     }
 
     private void FillCharArray()
@@ -59,14 +57,12 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        if (isGameStarted)
+        if (isLevelStarted)
             return;
 
         if (Input.GetMouseButton(0))
         {
-            isGameStarted = true;
-            tapToStartText.SetActive(false);
-            //PlayerController.AnimControl();
+            isLevelStarted = true;
             playerCont.Anim_Control();
         }
     }

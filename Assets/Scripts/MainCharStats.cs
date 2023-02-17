@@ -18,6 +18,11 @@ public class MainCharStats : MonoBehaviour
         PlayerController.animator.SetTrigger(WalkTypeString());
     }
 
+    public void WalkThenSlapRight()
+    {
+
+    }
+
     public string WalkTypeString()
     {
         switch (chType)

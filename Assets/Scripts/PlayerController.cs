@@ -6,14 +6,22 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public static Animator animator;
+    public static GameManager gameManager;
+    public bool isEndPlace;
 
     [SerializeField] private Text moneyText;
     [SerializeField] private GameObject[] models;
     [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private float upSpeed;
+    [SerializeField] private GameLevel gameLevel;
 
     private GameObject tempModel;
     private int upgradeIndex = 0;
     private PlayerStats playerSt;
+    private int slapIndex = 0;
+    private float coolDown;
+    private int stairCount = 0;
+
     
     public void InitPlayer()
     {
@@ -21,25 +29,15 @@ public class PlayerController : MonoBehaviour
         MainCharacterPool();
         SetActiveModel(0, 0);
         animator.SetTrigger("idle");
+        CheckCharMoney();
     }
     
-    public static void AnimControl()
-    {
-        int layerIndex = animator.GetLayerIndex("body");
-        animator.SetLayerWeight(layerIndex, 0);
-        animator.SetTrigger("poor_walk");
-        Debug.Log("Statik Anim Control");
-    }
-
     public void Anim_Control()
     {
-        //int layerIndex = animator.GetLayerIndex("body");
-        //animator.SetLayerWeight(layerIndex, 0);
         animator = tempModel.GetComponent<Animator>();
         animator.SetTrigger("poor_walk");
-        Debug.Log(animator);
     }
-
+    
     private void MainCharacterPool()
     {
         for (int i = 1; i < models.Length; i++)
@@ -56,14 +54,12 @@ public class PlayerController : MonoBehaviour
         tempModel = models[nextIndex];
         animator = tempModel.GetComponent<Animator>();
         
-        //if (GameManager.isGameStarted)
-        if (LevelManager.isGameStarted)
+        if (LevelManager.isLevelStarted)
         {
             animator.SetTrigger("spin");
         }
 
         upgradeIndex = nextIndex;
-       
     }
     
     private void GetUpgrade()
@@ -121,7 +117,7 @@ public class PlayerController : MonoBehaviour
         MainCharStats mainCharStats = tempModel.GetComponent<MainCharStats>();
 
         int layerIndex = animator.GetLayerIndex("body");
-
+        
         if (earn)
         {
             if (earn.isEarn)
@@ -152,11 +148,22 @@ public class PlayerController : MonoBehaviour
             if (distController.isFall)
                 return;
 
+            if (isEndPlace)
+            {
+                StartCoroutine(PlayerUp(other.transform.position.y));
+                //animator.SetTrigger("stair");
+            }
+
             if (playerSt.money > distController.earnMoney)
             {
                 distAnimator.SetTrigger("scared");
                 animator.SetLayerWeight(layerIndex, 1);
-                animator.SetTrigger("slap_up");
+
+                if (slapIndex == 0)
+                {
+                    animator.SetTrigger("slap_up");
+                }
+                
             }
         }
 
@@ -167,35 +174,87 @@ public class PlayerController : MonoBehaviour
 
             if (playerSt.money < charController.earnMoney)
             {
-                if (playerSt.money == 0) // DURUM 3
+                if (isEndPlace)
                 {
-                    Debug.Log("Defeat !!!");
-                    movement.forwadSpeed = 0;
+                    movement.forwardSpeed = 0;
                     charAnimator.SetTrigger("slap");
                     animator.SetTrigger("defeat");
 
-                    // Biraz bekle sonra GameOver UI aç
-                    //gameOverUI.SetActive(true);
+                    if (stairCount >= 1)
+                    {
+                        gameManager.completedUI.SetActive(true);
+                    }
+                    else
+                    {
+                        gameManager.loseUI.SetActive(true);
+                    }
+                    
                 }
-                else // DURUM 2
+                else
                 {
-                    Debug.Log("Force? ");
-                    charAnimator.SetTrigger("slap");
-                    animator.SetTrigger("force");
+                    if (playerSt.money == 0) // DURUM 3
+                    {
+                        movement.forwardSpeed = 0;
+                        charAnimator.SetTrigger("slap");
+                        animator.SetTrigger("defeat");
+
+                        gameManager.loseUI.SetActive(true);
+
+                        // Biraz bekle sonra You Lose UI aç
+                        // gameOverUI.SetActive(true);
+                    }
+                    else // DURUM 2
+                    {
+                        charAnimator.SetTrigger("slap");
+                        animator.SetTrigger("force");
+                    }
                 }
             }
             else // DURUM 1
             {
-                Debug.Log("Tokatı Önce Kaldır -- Yapıştırrr");
                 charAnimator.SetTrigger("fall");
                 charController.isFall = true;
 
                 //animator.SetTrigger(mainCharStats.SlapTypeString());
                 //animator.Play("Anim_rich_catwalk_slap");
                 animator.SetLayerWeight(layerIndex, 1);
-                animator.SetTrigger("slap_down");
-            }
 
+                if (slapIndex == 0)
+                {
+                    animator.SetTrigger("slap_down");
+                    slapIndex = 1;
+                    StartCoroutine(SlapCoolDown());
+                }
+                else if (slapIndex == 1)
+                {
+                    GameManager.isCanWalk = false;
+                    animator.SetTrigger("slap_right");
+                    slapIndex = 0;
+                }
+
+                if (isEndPlace)
+                {
+                    stairCount++;
+
+                    if (stairCount == 1)
+                    {
+                        gameLevel.level++;
+                        if (gameLevel.level % 4 == 0)
+                        {
+                            gameLevel.level = 1;
+                        }
+                        SaveSystem.SaveLevel(gameLevel);
+                    }
+
+                    if (stairCount == 5)
+                    {
+                        movement.forwardSpeed = 0;
+                        gameManager.completedUI.SetActive(true);
+                        animator.SetTrigger("idle");
+                    }
+                }
+
+            }
         }
     }
 
@@ -215,13 +274,10 @@ public class PlayerController : MonoBehaviour
             mainCharStats.Walk();
         }
 
-        if (charController)
+        if (charController && charController.isEarnable)
         {
-
             if (playerSt.money < charController.earnMoney && playerSt.money != 0) // DURUM 2
             {
-                Debug.Log("Para sıfırlandı");
-
                 if (playerSt.money < (charController.earnMoney / 2))
                 {
                     playerSt.money = 0;
@@ -236,7 +292,6 @@ public class PlayerController : MonoBehaviour
             }
             else // DURUM 1
             {
-                Debug.Log("Para ver");
                 playerSt.money += charController.earnMoney;
 
                 GetUpgrade();
@@ -245,8 +300,47 @@ public class PlayerController : MonoBehaviour
             moneyText.text = "$" + playerSt.money + "K";
             CheckCharMoney();
         }
-
+        
         animator.SetLayerWeight(layerIndex, 0);
     }
     
+    IEnumerator SlapCoolDown()
+    {
+        var wait = new WaitForEndOfFrame();
+
+        coolDown = 2;
+
+        while (coolDown > 0)
+        {
+            coolDown -= Time.deltaTime;
+
+            yield return wait;
+        }
+
+        if (coolDown <= 0)
+        {
+            slapIndex = 0;
+        }
+    }
+
+    IEnumerator PlayerUp(float yPos)
+    {
+        var wait = new WaitForEndOfFrame();
+        float time = 0;
+        Vector3 start = transform.position;
+
+        while (time < upSpeed)
+        {
+            time += Time.deltaTime;
+
+            transform.position = 
+                Vector3.Lerp(
+                    start, 
+                    new Vector3(transform.position.x, yPos+0.3f, transform.position.z), 
+                    time);
+
+            yield return wait;
+        }
+    }
+
 }

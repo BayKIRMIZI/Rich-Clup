@@ -5,27 +5,50 @@ using UnityEngine;
 public class GeciciFinishControl : MonoBehaviour
 {
     [SerializeField] private GameLevel gameLevel;
-
-    /* private void OntriggerEnter(Collider other)
-     {
-         Debug.Log("Finish e Geldi");
-         Debug.Log(gameLevel.level);
-         if (other.tag == "Player")
-         {
-             gameLevel.level++;
-             SaveSystem.SaveLevel(gameLevel);
-             Debug.Log(gameLevel.level);
-         }
-     }*/
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private float endTime;
+    [SerializeField] private float forwardSpeed;
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Finish");
         if (other.tag == "Player")
         {
-            gameLevel.level++;
-            SaveSystem.SaveLevel(gameLevel);
-            Debug.Log(gameLevel.level);
+            StartCoroutine(PlayerGetCenter(other.transform));
+            
+            playerMovement.forwardSpeed = 2;
+            playerMovement.isMove = false;
+            playerController.isEndPlace = true;
+
+            //SaveLevel();
+        }
+    }
+
+    public void SaveLevel()
+    {
+        gameLevel.level++;
+        SaveSystem.SaveLevel(gameLevel);
+        Debug.Log("Level Kaydedildi. Sıradaki level: " + gameLevel.level);
+    }
+
+    IEnumerator PlayerGetCenter(Transform target)
+    {
+        var wait = new WaitForEndOfFrame();
+        float time = 0;
+        Vector3 start = target.position;
+        float startx = start.x;
+        float currentx = startx;
+
+
+        while (time < endTime)
+        {
+            time += Time.deltaTime;
+            currentx = Mathf.Lerp(startx, 0f, time / endTime);
+            Vector3 tempVec = target.transform.position;
+            tempVec.x = currentx;
+            target.position = tempVec;
+            target.position += Vector3.forward * forwardSpeed * Time.deltaTime;
+            yield return wait;
         }
     }
 }
