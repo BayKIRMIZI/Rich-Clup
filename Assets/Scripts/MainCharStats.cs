@@ -15,12 +15,8 @@ public class MainCharStats : MonoBehaviour
 
     public void Walk()
     {
-        PlayerController.animator.SetTrigger(WalkTypeString());
-    }
-
-    public void WalkThenSlapRight()
-    {
-
+        if(!LevelManager.isLevelLosed)
+            PlayerController.animator.SetTrigger(WalkTypeString());
     }
 
     public string WalkTypeString()

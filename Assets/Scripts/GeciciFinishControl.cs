@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class GeciciFinishControl : MonoBehaviour
 {
+   /* public static GeciciFinishControl finishControl;
     [SerializeField] private GameLevel gameLevel;
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerController playerController;
     [SerializeField] private float endTime;
     [SerializeField] private float forwardSpeed;
+
+    public bool isEndPlace;
+
+    private void Awake()
+    {
+        finishControl = this;
+        isEndPlace = false;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,6 +28,8 @@ public class GeciciFinishControl : MonoBehaviour
             playerMovement.forwardSpeed = 2;
             playerMovement.isMove = false;
             playerController.isEndPlace = true;
+
+            isEndPlace = true;
 
             //SaveLevel();
         }
@@ -50,5 +61,5 @@ public class GeciciFinishControl : MonoBehaviour
             target.position += Vector3.forward * forwardSpeed * Time.deltaTime;
             yield return wait;
         }
-    }
+    }*/
 }

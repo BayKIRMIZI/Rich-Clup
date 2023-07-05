@@ -60,7 +60,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   earnMoney: 0
   isFall: 0
+  isEarnable: 0
   money: {fileID: 7473162896164951550}
+  red: {fileID: 7473162897149637916}
+  green: {fileID: 2047756089139389148}
+  charCanvas: {fileID: 7473162895399288890}
 --- !u!1001 &6546229066474296340
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -131,6 +135,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4243617720398370610, guid: 4b4b0fe1d34ed704186d3211da19fc80, type: 3}
   m_PrefabInstance: {fileID: 6546229066474296340}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7473162895399288890 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4426724695427912750, guid: 4b4b0fe1d34ed704186d3211da19fc80, type: 3}
+  m_PrefabInstance: {fileID: 6546229066474296340}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7473162897149637916 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4426724696891990280, guid: 4b4b0fe1d34ed704186d3211da19fc80, type: 3}
+  m_PrefabInstance: {fileID: 6546229066474296340}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7473162896164951550 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4426724695789994474, guid: 4b4b0fe1d34ed704186d3211da19fc80, type: 3}
@@ -142,3 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2047756089139389148 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5094688244961015496, guid: 4b4b0fe1d34ed704186d3211da19fc80, type: 3}
+  m_PrefabInstance: {fileID: 6546229066474296340}
+  m_PrefabAsset: {fileID: 0}

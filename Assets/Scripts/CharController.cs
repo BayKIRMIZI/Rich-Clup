@@ -10,6 +10,7 @@ public class CharController : MonoBehaviour
     [SerializeField] private Text money;
     [SerializeField] private GameObject red;
     [SerializeField] private GameObject green;
+    [SerializeField] private GameObject charCanvas;
 
     private void Start()
     {
@@ -29,4 +30,11 @@ public class CharController : MonoBehaviour
             green.SetActive(true);
         }
     }
+
+    public void CanvasActive()
+    {
+        charCanvas.SetActive(false);
+        this.gameObject.GetComponent<BoxCollider>().enabled = false;
+    }
+
 }

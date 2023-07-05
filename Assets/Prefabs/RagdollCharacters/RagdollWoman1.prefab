@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6334078615601482829
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8019664324555119120}
+  - component: {fileID: 5864712508098617170}
+  - component: {fileID: 8981613743214051489}
+  m_Layer: 0
+  m_Name: RagdollWoman1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8019664324555119120
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6334078615601482829}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 6035937743843725398}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!65 &5864712508098617170
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6334078615601482829}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2, z: 2}
+  m_Center: {x: 0, y: 1, z: 1}
+--- !u!114 &8981613743214051489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6334078615601482829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5adfd7b534f7f4faefb45fe3abd24e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  earnMoney: 20
+  isFall: 0
+  isEarnable: 1
+  money: {fileID: 5000070293335631200}
+  red: {fileID: 8853038040457996221}
+  green: {fileID: 5142297673921340403}
+  charCanvas: {fileID: 6074712479427247095}
+--- !u!1001 &664523845795832952
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8019664324555119120}
+    m_Modifications:
+    - target: {fileID: 5886478645248274068, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_Name
+      value: woman_ragdoll_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+--- !u!4 &6035937743843725398 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6555879377954042926, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+  m_PrefabInstance: {fileID: 664523845795832952}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6074712479427247095 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6734405615772983183, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+  m_PrefabInstance: {fileID: 664523845795832952}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8853038040457996221 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8350962182118900677, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+  m_PrefabInstance: {fileID: 664523845795832952}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5000070293335631200 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5502006325026947352, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+  m_PrefabInstance: {fileID: 664523845795832952}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &5142297673921340403 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5649133066573694859, guid: 9f208b805417a3541b63b2ac3160bbaf, type: 3}
+  m_PrefabInstance: {fileID: 664523845795832952}
+  m_PrefabAsset: {fileID: 0}

@@ -7,14 +7,9 @@ public class GameManager : MonoBehaviour
 {
     public static bool isGameStarted;
     public static bool isCanWalk = true;
-    
-    public GameObject completedUI;
-    public GameObject loseUI;
 
-    [SerializeField] private Text levelInfo;
-    [SerializeField] private Text tapToStartText;
-    [SerializeField] private GameObject losePanel;
 
+    private UIManager ui;
     private GameLevel gameLevel;
     private PlayerData playerData;
     private GameObject levelPrefab;
@@ -25,11 +20,9 @@ public class GameManager : MonoBehaviour
     {
         gameLevel = transform.GetComponent<GameLevel>();
         //SaveSystem.SaveLevel(gameLevel);
-        UploadLevel();
-        losePanel.SetActive(false); // sonra sil
-        loseUI.SetActive(false);
-        completedUI.SetActive(false);
-
+        
+        
+        
         PlayerController.gameManager = this;
 
         /*playerData = SaveSystem.LoadLevel(gameLevel);
@@ -40,15 +33,26 @@ public class GameManager : MonoBehaviour
         clone.transform.parent = this.transform;*/
     }
 
+    private void Start()
+    {
+        ui = UIManager.uiManager;
+        UploadLevel();
+        ui.loseUI.SetActive(false);
+        ui.completedUI.SetActive(false);
+
+    }
+
+
     private void Update()
     {
-        if (isGameStarted)
+        if (GameManager.isGameStarted)
             return;
 
         if (Input.GetMouseButton(0))
         {
-            isGameStarted = true;
-            tapToStartText.gameObject.SetActive(false);
+            GameManager.isGameStarted = true;
+
+            ui.tapToStartText.gameObject.SetActive(false);
         }
     }
 
@@ -56,8 +60,20 @@ public class GameManager : MonoBehaviour
     {
         Destroy(clone);
         playerData = SaveSystem.LoadLevel(gameLevel);
-        levelInfo.text = "Level " + playerData.level.ToString();
-        levelPath = "Levels/Level_" + playerData.level.ToString();
+
+        ui.levelInfo.text = "Level " + playerData.level.ToString();
+
+        if (playerData.level > 4)
+        {
+            string levelForPath = ( ( (playerData.level - 1) % 4) + 1).ToString();
+            levelPath = "Levels/Level_" + levelForPath;
+            Debug.Log(levelForPath);
+        }
+        else
+        {
+            levelPath = "Levels/Level_" + playerData.level.ToString();
+        }
+        
         levelPrefab = Resources.Load<GameObject>(levelPath);
         clone = Instantiate(levelPrefab);
         clone.transform.parent = this.transform;
@@ -66,10 +82,12 @@ public class GameManager : MonoBehaviour
     public void NextLevel()
     {
         LevelManager.isLevelStarted = false;
+        GameManager.isGameStarted = false;
         UploadLevel();
-        tapToStartText.gameObject.SetActive(true);
-        loseUI.SetActive(false);
-        completedUI.SetActive(false);
+
+        ui.tapToStartText.gameObject.SetActive(true);
+        ui.loseUI.SetActive(false);
+        ui.completedUI.SetActive(false);
     }
 
 }

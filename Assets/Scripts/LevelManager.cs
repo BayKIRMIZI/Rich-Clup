@@ -4,9 +4,10 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     public static bool isLevelStarted;
+    public static bool isLevelLosed;
     public static CharController[] chars;
 
-    [SerializeField] private GameObject tapToStartText;
+    //[SerializeField] private GameObject tapToStartText;
     [SerializeField] private Text moneyText;
     [SerializeField] private GameObject player;
     [SerializeField] private Transform humanModels;
@@ -38,7 +39,8 @@ public class LevelManager : MonoBehaviour
     private void GameManagerInit()
     {
         isLevelStarted = false;
-        tapToStartText.SetActive(true);
+        isLevelLosed = false;
+        //tapToStartText.SetActive(true);
 
         gameLevel.LoadLevel();
 
@@ -63,6 +65,7 @@ public class LevelManager : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             isLevelStarted = true;
+            isLevelLosed = false;
             playerCont.Anim_Control();
         }
     }

@@ -62,8 +62,9 @@ MonoBehaviour:
   isFall: 0
   isEarnable: 0
   money: {fileID: 1870370089427966745}
-  red: {fileID: 0}
-  green: {fileID: 0}
+  red: {fileID: 1026861266594348164}
+  green: {fileID: 6300058340076597026}
+  charCanvas: {fileID: 2313737369527117883}
 --- !u!1001 &3555238707063606567
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -148,6 +149,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 452247398917213238, guid: b441310cf70462548ba72435bc3a634a, type: 3}
   m_PrefabInstance: {fileID: 3555238707063606567}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2313737369527117883 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1246007415225918748, guid: b441310cf70462548ba72435bc3a634a, type: 3}
+  m_PrefabInstance: {fileID: 3555238707063606567}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1026861266594348164 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4545990358232232355, guid: b441310cf70462548ba72435bc3a634a, type: 3}
+  m_PrefabInstance: {fileID: 3555238707063606567}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1870370089427966745 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2928005423109789246, guid: b441310cf70462548ba72435bc3a634a, type: 3}
@@ -159,6 +170,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6300058340076597026 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7365904830960656901, guid: b441310cf70462548ba72435bc3a634a, type: 3}
+  m_PrefabInstance: {fileID: 3555238707063606567}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4459455933029464855
 PrefabInstance:
   m_ObjectHideFlags: 0
